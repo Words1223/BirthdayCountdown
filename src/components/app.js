@@ -5,20 +5,31 @@ import Clock from './clock';
 import changeDate from './changeDate';
 import largeText from './largeText';
 
+import moment from 'moment';
+
 export default class App extends Component {
 
   constructor(props) {
     super(props)
 
     this.state = {
-      active: false
+      active: false,
+      startDate: moment()
     }
   }
+
+  handleChange(date) {
+    console.log('trying to change date for', date._d);
+    this.setState({
+        startDate: date
+    });
+}
 
   handleGenerate = function() {
     this.setState({ active: true })
     // Set the date we're counting down to
-  var countDownDate = new Date("Sep 5, 2018 15:37:25").getTime();
+  
+  var countDownDate = this.state.startDate.toDate().getTime();
 
   // Update the count down every 1 second
   var x = setInterval(function() {
@@ -58,7 +69,7 @@ export default class App extends Component {
       ]
     } else {
       return [
-        <Picker />,
+        <Picker callback={(date) => this.handleChange(date)}/>,
         Button('Generate Countdown', () => this.handleGenerate())
       ]
     }
